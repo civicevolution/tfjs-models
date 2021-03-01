@@ -1,4 +1,4 @@
-console.log('### Modified universal-sentence-encoder');
+console.log('### v3 Modified universal-sentence-encoder');
 /**
  * @license
  * Copyright 2019 Google LLC. All Rights Reserved.
@@ -39,7 +39,7 @@ interface LoadConfig {
 
 export async function load(config?: LoadConfig) {
   console.log(
-      '### Modified universal-sentence-encoder to load from local files - 1'
+      '### v3 Modified universal-sentence-encoder to load from local files - 1'
   );
   const use = new UniversalSentenceEncoder();
   await use.load(config);
@@ -61,7 +61,7 @@ export class UniversalSentenceEncoder {
 
   async load(config: LoadConfig = {}) {
     console.log(
-        '### Modified universal-sentence-encoder to load from local files - 2'
+        '### v3 Modified universal-sentence-encoder to load from local files - 2'
     );
     const [model, vocabulary] = await Promise.all([
       this.loadModel(config.modelUrl),

@@ -15,3 +15,16 @@ yarn.lock
 .cache/
 yalc.lock
 
+blazeface/
+body-pix/
+coco-ssd/
+deeplab/
+face-landmarks-detection/
+facemesh/
+handpose/
+knn-classifier/
+mobilenet/
+posenet/
+qna/
+speech-commands/
+toxicity/

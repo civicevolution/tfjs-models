@@ -439,7 +439,7 @@ var UniversalSentenceEncoderQnA = /** @class */ (function () {
     return UniversalSentenceEncoderQnA;
 }());
 
-console.log('### Modified universal-sentence-encoder');
+console.log('### v3 Modified universal-sentence-encoder');
 var BASE_PATH = 'https://storage.googleapis.com/tfjs-models/savedmodel/universal_sentence_encoder';
 function load(config) {
     return __awaiter(this, void 0, void 0, function () {
@@ -447,7 +447,7 @@ function load(config) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    console.log('### Modified universal-sentence-encoder to load from local files - 1');
+                    console.log('### v3 Modified universal-sentence-encoder to load from local files - 1');
                     use = new UniversalSentenceEncoder();
                     return [4 /*yield*/, use.load(config)];
                 case 1:
@@ -476,7 +476,7 @@ var UniversalSentenceEncoder = /** @class */ (function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        console.log('### Modified universal-sentence-encoder to load from local files - 2');
+                        console.log('### v3 Modified universal-sentence-encoder to load from local files - 2');
                         return [4 /*yield*/, Promise.all([
                                 this.loadModel(config.modelUrl),
                                 loadVocabulary(config.vocabUrl || BASE_PATH + "/vocab.json")

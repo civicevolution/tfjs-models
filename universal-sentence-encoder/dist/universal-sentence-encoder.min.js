@@ -442,22 +442,7 @@
         return UniversalSentenceEncoderQnA;
     }());
 
-    /**
-     * @license
-     * Copyright 2019 Google LLC. All Rights Reserved.
-     * Licensed under the Apache License, Version 2.0 (the "License");
-     * you may not use this file except in compliance with the License.
-     * You may obtain a copy of the License at
-     *
-     * http://www.apache.org/licenses/LICENSE-2.0
-     *
-     * Unless required by applicable law or agreed to in writing, software
-     * distributed under the License is distributed on an "AS IS" BASIS,
-     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     * See the License for the specific language governing permissions and
-     * limitations under the License.
-     * =============================================================================
-     */
+    console.log('### Modified universal-sentence-encoder');
     var BASE_PATH = 'https://storage.googleapis.com/tfjs-models/savedmodel/universal_sentence_encoder';
     function load(config) {
         return __awaiter(this, void 0, void 0, function () {
@@ -465,6 +450,7 @@
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        console.log('### Modified universal-sentence-encoder to load from local files - 1');
                         use = new UniversalSentenceEncoder();
                         return [4 /*yield*/, use.load(config)];
                     case 1:
@@ -492,10 +478,12 @@
                 var _a, model, vocabulary;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
-                        case 0: return [4 /*yield*/, Promise.all([
-                                this.loadModel(config.modelUrl),
-                                loadVocabulary(config.vocabUrl || BASE_PATH + "/vocab.json")
-                            ])];
+                        case 0:
+                            console.log('### Modified universal-sentence-encoder to load from local files - 2');
+                            return [4 /*yield*/, Promise.all([
+                                    this.loadModel(config.modelUrl),
+                                    loadVocabulary(config.vocabUrl || BASE_PATH + "/vocab.json")
+                                ])];
                         case 1:
                             _a = _b.sent(), model = _a[0], vocabulary = _a[1];
                             this.model = model;

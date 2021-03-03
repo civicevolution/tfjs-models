@@ -463,9 +463,12 @@ var UniversalSentenceEncoder = /** @class */ (function () {
     }
     UniversalSentenceEncoder.prototype.loadModelFromFile = function () {
         return __awaiter(this, void 0, void 0, function () {
+            var lgm;
             return __generator(this, function (_a) {
                 console.log('loadModelFromFile');
-                return [2 /*return*/, loadGraphModel('file://use_model/model.json', { fromTFHub: false })];
+                lgm = loadGraphModel('file://use_model/model.json', { fromTFHub: false });
+                console.log('check lgm');
+                return [2 /*return*/, lgm];
             });
         });
     };

@@ -51,10 +51,12 @@ export class UniversalSentenceEncoder {
 
   async loadModelFromFile() {
     console.log('loadModelFromFile');
-    const lgm = tfconv.loadGraphModel(
+    const lgmp = tfconv.loadGraphModel(
         'file://use_model/model.json',
         { fromTFHub: false }
     );
+    console.log('check lgmp');
+    const lgm = await lgmp;
     console.log('check lgm');
     return lgm;
   }

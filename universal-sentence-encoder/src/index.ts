@@ -1,4 +1,4 @@
-console.log('### v5 Modified universal-sentence-encoder');
+console.log('### v7 Modified universal-sentence-encoder');
 /**
  * @license
  * Copyright 2019 Google LLC. All Rights Reserved.
@@ -16,8 +16,8 @@ console.log('### v5 Modified universal-sentence-encoder');
  * =============================================================================
  */
 
-import * as tfconv from '@tensorflow/tfjs-converter';
 import * as tf from '@tensorflow/tfjs-core';
+import * as tfn from '@tensorflow/tfjs-node';
 import * as fs from 'fs';
 const fsp = fs.promises;
 
@@ -38,7 +38,7 @@ interface LoadConfig {
 
 export async function load(config?: LoadConfig) {
   console.log(
-      '### v5 Modified universal-sentence-encoder to load from local files - 1'
+      '### v7 Modified universal-sentence-encoder to load from local files - 1'
   );
   const use = new UniversalSentenceEncoder();
   await use.load(config);
@@ -46,12 +46,13 @@ export async function load(config?: LoadConfig) {
 }
 
 export class UniversalSentenceEncoder {
-  private model: tfconv.GraphModel;
+  private model: tfn.GraphModel;
   private tokenizer: Tokenizer;
 
   async loadModelFromFile() {
     console.log('loadModelFromFile');
-    const lgmp = tfconv.loadGraphModel(
+
+    const lgmp = tfn.loadGraphModel(
         'file://use_model/model.json',
         { fromTFHub: false }
     );
@@ -67,7 +68,7 @@ export class UniversalSentenceEncoder {
   }
   async load(config: LoadConfig = {}) {
     console.log(
-        '### v5 Modified universal-sentence-encoder to load from local files - 2'
+        '### v7 Modified universal-sentence-encoder to load from local files - 2'
     );
     const [model, vocabulary] = await Promise.all([
       this.loadModelFromFile(),

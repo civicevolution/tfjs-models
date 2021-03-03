@@ -15,10 +15,10 @@
     * =============================================================================
     */
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@tensorflow/tfjs-converter'), require('@tensorflow/tfjs-core')) :
-    typeof define === 'function' && define.amd ? define(['exports', '@tensorflow/tfjs-converter', '@tensorflow/tfjs-core'], factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.use = {}, global.tf, global.tf));
-}(this, (function (exports, tfconv, tf) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@tensorflow/tfjs-converter'), require('@tensorflow/tfjs-core'), require('fs')) :
+    typeof define === 'function' && define.amd ? define(['exports', '@tensorflow/tfjs-converter', '@tensorflow/tfjs-core', 'fs'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.use = {}, global.tf, global.tf, global.fs));
+}(this, (function (exports, tfconv, tf, fs) { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation.
@@ -323,7 +323,7 @@
      * limitations under the License.
      * =============================================================================
      */
-    var BASE_PATH$1 = 'https://tfhub.dev/google/tfjs-model/universal-sentence-encoder-qa-ondevice/1';
+    var BASE_PATH = 'https://tfhub.dev/google/tfjs-model/universal-sentence-encoder-qa-ondevice/1';
     // Index in the vocab file that needs to be skipped.
     var SKIP_VALUES = [0, 1, 2];
     // Offset value for skipped vocab index.
@@ -367,7 +367,7 @@
         UniversalSentenceEncoderQnA.prototype.loadModel = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
-                    return [2 /*return*/, tfconv.loadGraphModel(BASE_PATH$1, { fromTFHub: true })];
+                    return [2 /*return*/, tfconv.loadGraphModel(BASE_PATH, { fromTFHub: true })];
                 });
             });
         };
@@ -378,7 +378,7 @@
                     switch (_b.label) {
                         case 0: return [4 /*yield*/, Promise.all([
                                 this.loadModel(),
-                                loadVocabulary(BASE_PATH$1 + "/vocab.json?tfjs-format=file")
+                                loadVocabulary(BASE_PATH + "/vocab.json?tfjs-format=file")
                             ])];
                         case 1:
                             _a = _b.sent(), model = _a[0], vocabulary = _a[1];
@@ -442,15 +442,15 @@
         return UniversalSentenceEncoderQnA;
     }());
 
-    console.log('### v4 Modified universal-sentence-encoder');
-    var BASE_PATH = 'https://storage.googleapis.com/tfjs-models/savedmodel/universal_sentence_encoder';
+    console.log('### v5 Modified universal-sentence-encoder');
+    var fsp = fs.promises;
     function load(config) {
         return __awaiter(this, void 0, void 0, function () {
             var use;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        console.log('### v4 Modified universal-sentence-encoder to load from local files - 1');
+                        console.log('### v5 Modified universal-sentence-encoder to load from local files - 1');
                         use = new UniversalSentenceEncoder();
                         return [4 /*yield*/, use.load(config)];
                     case 1:
@@ -463,29 +463,43 @@
     var UniversalSentenceEncoder = /** @class */ (function () {
         function UniversalSentenceEncoder() {
         }
-        UniversalSentenceEncoder.prototype.loadModel = function (modelUrl) {
+        UniversalSentenceEncoder.prototype.loadModelFromFile = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
-                    return [2 /*return*/, modelUrl
-                            ? tfconv.loadGraphModel(modelUrl)
-                            : tfconv.loadGraphModel('https://tfhub.dev/tensorflow/tfjs-model/universal-sentence-encoder-lite/1/default/1', { fromTFHub: true })];
+                    console.log('loadModelFromFile');
+                    return [2 /*return*/, tfconv.loadGraphModel('file://use_model/model.json', { fromTFHub: false })];
+                });
+            });
+        };
+        UniversalSentenceEncoder.prototype.loadVocabularyFromFile = function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var vocab;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            console.log('loadVocabularyFromFile');
+                            return [4 /*yield*/, fsp.readFile('./use_model_vocabulary/vocab.json')];
+                        case 1:
+                            vocab = _a.sent();
+                            return [2 /*return*/, JSON.parse(vocab.toString('utf8'))];
+                    }
                 });
             });
         };
         UniversalSentenceEncoder.prototype.load = function (config) {
-            if (config === void 0) { config = {}; }
             return __awaiter(this, void 0, void 0, function () {
                 var _a, model, vocabulary;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
-                            console.log('### v4 Modified universal-sentence-encoder to load from local files - 2');
+                            console.log('### v5 Modified universal-sentence-encoder to load from local files - 2');
                             return [4 /*yield*/, Promise.all([
-                                    this.loadModel(config.modelUrl),
-                                    loadVocabulary(config.vocabUrl || BASE_PATH + "/vocab.json")
+                                    this.loadModelFromFile(),
+                                    this.loadVocabularyFromFile()
                                 ])];
                         case 1:
                             _a = _b.sent(), model = _a[0], vocabulary = _a[1];
+                            console.log('tensorflow/universal-sentence-encoder loaded from local files');
                             this.model = model;
                             this.tokenizer = new Tokenizer(vocabulary);
                             return [2 /*return*/];

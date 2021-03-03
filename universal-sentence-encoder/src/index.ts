@@ -1,4 +1,4 @@
-console.log('### v4 Modified universal-sentence-encoder');
+console.log('### v5 Modified universal-sentence-encoder');
 /**
  * @license
  * Copyright 2019 Google LLC. All Rights Reserved.
@@ -18,14 +18,13 @@ console.log('### v4 Modified universal-sentence-encoder');
 
 import * as tfconv from '@tensorflow/tfjs-converter';
 import * as tf from '@tensorflow/tfjs-core';
+import * as fs from 'fs';
+const fsp = fs.promises;
 
-import {loadTokenizer, loadVocabulary, Tokenizer} from './tokenizer';
+import {loadTokenizer, Tokenizer} from './tokenizer';
 import {loadQnA} from './use_qna';
 
 export {version} from './version';
-
-const BASE_PATH =
-    'https://storage.googleapis.com/tfjs-models/savedmodel/universal_sentence_encoder';
 
 declare interface ModelInputs extends tf.NamedTensorMap {
   indices: tf.Tensor;
@@ -39,7 +38,7 @@ interface LoadConfig {
 
 export async function load(config?: LoadConfig) {
   console.log(
-      '### v4 Modified universal-sentence-encoder to load from local files - 1'
+      '### v5 Modified universal-sentence-encoder to load from local files - 1'
   );
   const use = new UniversalSentenceEncoder();
   await use.load(config);
@@ -50,24 +49,29 @@ export class UniversalSentenceEncoder {
   private model: tfconv.GraphModel;
   private tokenizer: Tokenizer;
 
-  async loadModel(modelUrl?: string) {
-    return modelUrl
-      ? tfconv.loadGraphModel(modelUrl)
-      : tfconv.loadGraphModel(
-          'https://tfhub.dev/tensorflow/tfjs-model/universal-sentence-encoder-lite/1/default/1',
-          {fromTFHub: true}
-        );
+  async loadModelFromFile() {
+    console.log('loadModelFromFile');
+    return tfconv.loadGraphModel(
+        'file://use_model/model.json',
+        { fromTFHub: false }
+    );
   }
-
+  async loadVocabularyFromFile() {
+    console.log('loadVocabularyFromFile');
+    const vocab = await fsp.readFile('./use_model_vocabulary/vocab.json');
+    return JSON.parse(vocab.toString('utf8'));
+  }
   async load(config: LoadConfig = {}) {
     console.log(
-        '### v4 Modified universal-sentence-encoder to load from local files - 2'
+        '### v5 Modified universal-sentence-encoder to load from local files - 2'
     );
     const [model, vocabulary] = await Promise.all([
-      this.loadModel(config.modelUrl),
-      loadVocabulary(config.vocabUrl || `${BASE_PATH}/vocab.json`)
+      this.loadModelFromFile(),
+      this.loadVocabularyFromFile()
     ]);
-
+    console.log(
+        'tensorflow/universal-sentence-encoder loaded from local files'
+    );
     this.model = model;
     this.tokenizer = new Tokenizer(vocabulary);
   }
